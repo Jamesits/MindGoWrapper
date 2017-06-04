@@ -85,15 +85,17 @@ class Wrapper():
   def _monitor_orders(self):
     '''监视订单完成情况，订单一旦完成就更新个股信息'''
     for symbol, portfolio in self.portfolios.items():
-      open_orders = [x.id for x in self.platform_apis.get_open_orders(symbol)]
-      for order_id in portfolio.orders:
-        if order_id not in open_orders:
-          order = self.platform_apis.get_order(order_id)
-          if order != None:
-            portfolio.new_finished_order(order, self.get_current_price(symbol))
-            portfolio.orders.remove(order_id)
-          else:
-            self.log.error('无法获取订单 {}，当前未完成订单：{}'.format(order_id, open_orders))
+      open_order_objs = self.platform_apis.get_open_orders(symbol)
+      if open_order_objs != None:
+        open_orders = [x.id for x in open_order_objs]
+        for order_id in portfolio.orders:
+          if order_id not in open_orders:
+            order = self.platform_apis.get_order(order_id)
+            if order != None:
+              portfolio.new_finished_order(order, self.get_current_price(symbol))
+              portfolio.orders.remove(order_id)
+            else:
+              self.log.error('无法获取订单 {}，当前未完成订单：{}'.format(order_id, open_orders))
 
   ################################
   # MindGo 平台相关
