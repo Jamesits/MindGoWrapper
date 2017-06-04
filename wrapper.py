@@ -78,8 +78,9 @@ class Wrapper():
   def _try_purchases(self):
     '''尝试调仓'''
     for symbol, portfolio in self.portfolios.items():
-      id = self.platform_apis.order_target_value(symbol, portfolio.object_value)
-      portfolio.orders.append(id)
+      if not self.is_paused(symbol):
+        id = self.platform_apis.order_target_value(symbol, portfolio.object_value)
+        portfolio.orders.append(id)
 
   def _monitor_orders(self):
     '''监视订单完成情况，订单一旦完成就更新个股信息'''
