@@ -29,8 +29,8 @@ class Wrapper():
     '''准备给某支股票建仓'''
     self.portfolios[symbol] = Portfolio(
       symbol, 
-      self.platform_apis.account.portfolio_value / self.config.security_count * self.config.currency_use_percent,
-      self.platform_apis.account.portfolio_value / self.config.security_count * self.config.currency_use_percent * self.config.purchase.initial_purchase
+      self.account.portfolio_value / self.config.security_count * self.config.currency_use_percent,
+      self.account.portfolio_value / self.config.security_count * self.config.currency_use_percent * self.config.purchase.initial_purchase
     )
 
   def remove_portfolio(self, symbol):
