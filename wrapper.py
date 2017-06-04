@@ -58,12 +58,14 @@ class Wrapper():
     '''在回测平台初始化时运行'''
     self.account = account
     self.log.debug('_mindgo_initialize')
+    self.date = self.account.start_date
 
   def _mindgo_handle_data(self, account, data):
     '''每个交易 tick 运行一次'''
     self.account = account
     self.data = data
     self.ticks += 1
+    self.date = self.platform_apis.get_datetime()
     self.log.debug('_mindgo_handle_data')
     self.scheduler.check(self.days, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
     self._update_portfolios_data()
@@ -102,6 +104,7 @@ class Wrapper():
     # 日期计数器
     self.ticks = -1
     self.days = -1
+    self.date = None
     # 日志工具
     self.log = logging.getLogger("MindGoWrapper")
     self.log.setLevel(logging.INFO)
