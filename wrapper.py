@@ -54,7 +54,7 @@ class Wrapper():
   def set_portfolios(self, symbols):
     '''批量更新选股信息'''
     for s in symbols:
-      if s not in symbols:
+      if s not in self.portfolios:
         self.create_portfolio(s)
     for s in self.portfolios:
       if s not in symbols:
