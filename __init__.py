@@ -1,4 +1,4 @@
-all = ['scheduler', 'data', 'transaction', 'map']
+all = ['scheduler', 'data', 'transaction', 'map', 'Wrapper']
 __version__ = '0.0.1'
 
 from scheduler import Scheduler
