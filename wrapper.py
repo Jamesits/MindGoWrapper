@@ -71,9 +71,12 @@ class Wrapper():
         self.create_portfolio(symbol, share_pool=False)
       self.portfolios[symbol].has_value = position.position_value
       self.portfolios[symbol].cost = position.cost_basis
+    symbols_to_be_deleted = []
     for symbol, portfolio in self.portfolios.items():
       if portfolio.has_value == 0 and portfolio.removed:
-        del self.portfolios[symbol]
+        symbols_to_be_deleted.append(symbol)
+    for symbol in symbols_to_be_deleted:
+      del self.portfolios[symbol]
 
   def _try_purchases(self):
     '''尝试调仓'''
