@@ -93,7 +93,7 @@ class Wrapper():
     # 一个只读的全局变量字典（Map 类型）
     self.platform_apis = None
     # 全局配置
-    self.config = config
+    self.config = None
     # MindGo 平台给的公共对象
     self.account = None
     self.data = None
