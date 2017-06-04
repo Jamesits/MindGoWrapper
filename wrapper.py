@@ -17,7 +17,7 @@ class Wrapper():
   def _mindgo_initialize(self, account):
     self.account = account
     self.log.debug('_mindgo_initialize')
-    self.log.info('init')
+    print('init')
 
   def _mindgo_handle_data(self, account, data):
     self.account = account
