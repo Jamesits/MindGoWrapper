@@ -4,7 +4,7 @@ Some wrapper for sh*t quant platform MindGo.
 
 ## Usage
 
-Reset kernel every time before running. (`pwd` changes every time backtest is run)
+Reset kernel every time before running. (`pwd` changes every time backtest is run.)
 
 ### Cell 0
 
@@ -28,6 +28,9 @@ Non-root `pwd` is more complicated; you may not be able to use it in backtest pa
 The actual backtest code：
 
 ```python
+%%backtest --start 2015-9-1 --end 2015-10-1 --capital-base 100000 --data-frequency minute --output -
+# data-frequency: days, minute or tick
+
 from MindGoWrapper.wrapper import Wrapper
 from MindGoWrapper.map import Map
 from MindGoWrapper.scheduler import Scheduler
