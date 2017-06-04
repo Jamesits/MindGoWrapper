@@ -87,7 +87,7 @@ class Wrapper():
       open_orders = [x.id for x in self.platform_apis.get_open_orders(symbol)]
       for order_id in portfolio.orders:
         if order_id not in open_orders:
-          portfolio.new_finished_order(get_order(order_id), self.get_current_price(symbol))
+          portfolio.new_finished_order(self.platform_apis.get_order(order_id), self.get_current_price(symbol))
           portfolio.orders.remove(order_id)
 
   ################################
