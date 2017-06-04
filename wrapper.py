@@ -103,11 +103,11 @@ class Wrapper():
     self.ticks += 1
     self.date = self.platform_apis.get_datetime()
     self.log.debug('_mindgo_handle_data')
-    self.scheduler.check(self.days, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
+    self.scheduler.check(self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
     self._update_portfolios_data()
     self._try_purchases()
     self._monitor_orders()
-    self.scheduler.check(self.days, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
+    self.scheduler.check(self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
 
   def _mindgo_before_trading_start(self, account, data):
     '''每个交易日之前运行'''
