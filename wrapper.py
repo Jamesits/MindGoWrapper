@@ -2,6 +2,7 @@ from .scheduler import Scheduler
 from .portfolio import Portfolio
 import logging
 from functools import partial
+from .map import Map
 
 class Wrapper():
   '''MindGo 平台 Wrapper。回测中使用方法：
