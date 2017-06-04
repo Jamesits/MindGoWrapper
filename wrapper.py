@@ -57,16 +57,16 @@ class Wrapper():
   def set_portfolios(self, symbols):
     '''批量更新选股信息'''
     for s in symbols:
-      if s not in self.portfolios.items():
+      if s not in self.portfolios:
         self.create_portfolio(s)
-    for s in self.portfolios.items():
+    for s in self.portfolios:
       if s not in symbols:
         self.remove_portfolio(s)
 
   def _update_portfolios_data(self):
     '''更新各股票的数据'''
     for symbol, position in self.account.positions:
-      if symbol not in self.portfolios.items():
+      if symbol not in self.portfolios:
         self.log.warn("股票 {} 信息失去同步，正在重建信息……".format(symbol))
         self.create_portfolio(symbol, share_pool=False)
       self.portfolios[symbol].has_value = position.position_value
