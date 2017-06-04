@@ -6,16 +6,18 @@ class Portfolio():
         self.cash_pool = 0
         # 允许买入的最大总价格
         self.total_price_limit = 0
-        # 当前持股数
-        self.has_amount = 0
         # 当前总价值
-        self.value = 0
-        # 目标持股数
-        self.object_amount = 0
+        self.has_value = 0
+        # 目标持股价值
+        self.object_value = 0
 
-    def try_purchase(object_amount=None):
-        if object_amount != None:
-            self.object_amount = object_amount
+    def try_purchase(purchase_callback, object_value=None):
+        '''尝试调仓
+        purchase_callback(value)：按持仓价格调仓的函数
+        object_value：新的目标持仓（可选）
+        '''
+        if object_value != None:
+            self.object_value = object_value
         # 尝试调仓
-        order_target(symbol, target)
+        purchase_callback(target)
         
