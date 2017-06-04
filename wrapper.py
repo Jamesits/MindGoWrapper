@@ -50,3 +50,4 @@ class Wrapper():
     self.platform_apis['handle_data'] = self._mindgo_handle_data
     self.platform_apis['before_trading_start'] = self._mindgo_before_trading_start
     self.platform_apis['after_trading_end'] = self._mindgo_after_trading_end
+    print(self.platform_apis)
