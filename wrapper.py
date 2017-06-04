@@ -15,9 +15,11 @@ class Wrapper():
   # 获取数据
 
   def get_current_price(self, symbol):
+    '''获取当前价格'''
     return self.data.current(symbol).open
 
   def is_paused(self, symbol):
+    '''是否涨停或跌停'''
     return self.data.current(symbol).is_paused
 
   ################################
@@ -32,7 +34,7 @@ class Wrapper():
       # 持股总价值上限：不超过现金池均分
       self.portfolios[symbol].total_price_limit = self.portfolios[symbol].cash_pool
       # 初始建仓：现金池百分比
-      self.portfolios[symbol].object_value = self.portfolios[symbol].cash_pool * self.config.timing.initial_purchase
+      self.portfolios[symbol].object_value = self.portfolios[symbol].cash_pool * self.config.purchase.initial_purchase
 
   def remove_portfolio(self, symbol):
     '''准备卖光某支股票'''

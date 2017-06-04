@@ -44,8 +44,8 @@ config = Map({
     'security_count': 10,
     # 资金用于投资的比例
     'currency_use_percent': 0.8,
-    # 择时逻辑
-    'timing': Map({
+    # 购买
+    'purchase': Map({
         # 刚买入时建仓百分比
         'initial_purchase': 0.05,
     }),
