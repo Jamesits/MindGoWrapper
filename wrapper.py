@@ -57,33 +57,33 @@ class Wrapper():
   def set_portfolios(self, symbols):
     '''批量更新选股信息'''
     for s in symbols:
-      if s not in self.portfolios:
+      if s not in self.portfolios.items():
         self.create_portfolio(s)
-    for s in self.portfolios:
+    for s in self.portfolios.items():
       if s not in symbols:
         self.remove_portfolio(s)
 
   def _update_portfolios_data(self):
     '''更新各股票的数据'''
     for symbol, position in self.account.positions:
-      if symbol not in self.portfolios:
+      if symbol not in self.portfolios.items():
         self.log.warn("股票 {} 信息失去同步，正在重建信息……".format(symbol))
         self.create_portfolio(symbol, share_pool=False)
       self.portfolios[symbol].has_value = position.position_value
       self.portfolios[symbol].cost = position.cost_basis
-    for symbol, portfolio in self.portfolios:
+    for symbol, portfolio in self.portfolios.items():
       if portfolio.has_value == 0 and portfolio.removed:
         del self.portfolios[symbol]
 
   def _try_purchases(self):
     '''尝试调仓'''
-    for symbol, portfolio in self.portfolios:
+    for symbol, portfolio in self.portfolios.items():
       id = self.platform_apis.order_target_value(symbol, portfolio.object_value)
       portfolio.orders.append(id)
 
   def _monitor_orders(self):
     '''监视订单完成情况，订单一旦完成就更新个股信息'''
-    for symbol, portfolio in self.portfolios:
+    for symbol, portfolio in self.portfolios.items():
       open_orders = [x.id for x in self.platform_apis.get_open_orders(symbol)]
       for order_id in portfolio.orders:
         if order_id not in open_orders:
