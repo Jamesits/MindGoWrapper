@@ -43,11 +43,11 @@ class Wrapper():
     self.portfolios = {}
     self.log = logging.getLogger("MindGoWrapper")
     self.log.setLevel(logging.INFO) # seems of no use
-    self.log.info('MindGoWrapper\nhttps://github.com/Jamesits/MindGoWrapper')
+    self.log.info('https://github.com/Jamesits/MindGoWrapper')
 
   def takeown(self):
     self.platform_apis['initialize'] = self._mindgo_initialize
     self.platform_apis['handle_data'] = self._mindgo_handle_data
     self.platform_apis['before_trading_start'] = self._mindgo_before_trading_start
     self.platform_apis['after_trading_end'] = self._mindgo_after_trading_end
-    print(self.platform_apis)
+    self.log.debug('takeown finished')
