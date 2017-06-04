@@ -29,15 +29,4 @@ class Wrapper():
     self.data = None
     self.log = logging.getLogger("MindGoWrapper")
     self.log.setLevel(logging.INFO) # seems of no use
-
-  def takeown(self):
     self.log.info('MindGoWrapper\nhttps://github.com/Jamesits/MindGoWrapper')
-    # takeown all MindGo callback functions
-    global initialize
-    global handle_data
-    global before_trading_start
-    global after_trading_end
-    initialize = partial(self._mindgo_initialize, self)
-    handle_data = partial(self._mindgo_handle_data, self)
-    before_trading_start = partial(self._mindgo_before_trading_start, self)
-    after_trading_end = partial(self._mindgo_after_trading_end, self)
