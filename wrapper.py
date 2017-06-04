@@ -40,6 +40,12 @@ class Wrapper():
     except KeyError:
       self.log.error("尝试卖空无仓位信息的股票：{}".format(symbol))
 
+  def get_portfolio_detail(self, symbol):
+    try:
+      return self.portfolios[symbol]
+    except KeyError:
+      self.log.error("尝试读取无仓位信息的股票：{}".format(symbol))
+
   def update_portfolio_object_value(self, symbol, new_object_value):
     '''更新某支股票的目标持仓'''
     try:
