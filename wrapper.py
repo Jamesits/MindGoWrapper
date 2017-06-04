@@ -1,5 +1,6 @@
 from .scheduler import Scheduler
 import logging
+from functools import partial
 
 class Wrapper():
   def _mindgo_initialize(self, account):
@@ -36,7 +37,7 @@ class Wrapper():
     global handle_data
     global before_trading_start
     global after_trading_end
-    initialize = self._mindgo_initialize
-    handle_data = self._mindgo_handle_data
-    before_trading_start = self._mindgo_before_trading_start
-    after_trading_end = self._mindgo_after_trading_end
+    initialize = partial(self._mindgo_initialize, self)
+    handle_data = partial(self._mindgo_handle_data, self)
+    before_trading_start = partial(self._mindgo_before_trading_start, self)
+    after_trading_end = partial(self._mindgo_after_trading_end, self)
