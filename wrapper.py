@@ -16,11 +16,11 @@ class Wrapper():
 
   def get_current_price(self, symbol):
     '''获取当前价格'''
-    return self.data.current(symbol)['symbol'].open
+    return self.data.current(symbol)[symbol].open
 
   def is_paused(self, symbol):
     '''是否涨停或跌停'''
-    return self.data.current(symbol)['symbol'].is_paused
+    return self.data.current(symbol)[symbol].is_paused
 
   ################################
   # 操作股票
