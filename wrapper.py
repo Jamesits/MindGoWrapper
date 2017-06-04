@@ -22,7 +22,7 @@ class Wrapper():
 
   def _update_portfolios_data(self):
     '''更新各股票的数据'''
-    for key, value in account.positions:
+    for key, value in self.account.positions:
       if key not in self.portfolios:
         self.create_portfolio(key, share_pool=False)
 
