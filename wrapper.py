@@ -47,6 +47,7 @@ class Wrapper():
     '''更新某支股票的目标持仓'''
     try:
       self.portfolios[symbol].set_new_object(new_object_value)
+      self.log.debug("股票 {} 目标持仓更新为 {} 元".format(symbol, new_object_value))
     except KeyError:
       self.log.error("尝试更新无仓位信息的股票：{}".format(symbol))
 
