@@ -27,14 +27,11 @@ class Wrapper():
 
   def create_portfolio(self, symbol, share_pool=True):
     '''准备给某支股票建仓'''
-    self.portfolios[symbol] = Portfolio(symbol)
-    if share_pool:
-      # 现金池：当前总资产均分给当前选股数量
-      self.portfolios[symbol].cash_pool = self.platform_apis.account.portfolio_value / self.config.security_count * self.config.currency_use_percent
-      # 持股总价值上限：不超过现金池均分
-      self.portfolios[symbol].total_price_limit = self.portfolios[symbol].cash_pool
-      # 初始建仓：现金池百分比
-      self.portfolios[symbol].object_value = self.portfolios[symbol].cash_pool * self.config.purchase.initial_purchase
+    self.portfolios[symbol] = Portfolio(
+      symbol, 
+      self.platform_apis.account.portfolio_value / self.config.security_count * self.config.currency_use_percent,
+      self.platform_apis.account.portfolio_value / self.config.security_count * self.config.currency_use_percent * self.config.purchase.initial_purchase
+    )
 
   def remove_portfolio(self, symbol):
     '''准备卖光某支股票'''
