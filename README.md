@@ -51,7 +51,7 @@ config = Map({
     }),
 })
 
-# callback_function will be executed twich every 22 days, at day 0 and 10
+# callback_function will be executed twice every 22 days, at day 0 and 10
 w.scheduler.schedule(callback_function, Scheduler.timeslot([0, 10], 22, Scheduler.Unit.DAY, Scheduler.Slot.BEFORE))
 
 # initialize MindGo platform

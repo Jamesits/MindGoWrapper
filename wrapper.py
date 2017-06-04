@@ -5,10 +5,19 @@ from functools import partial
 from .map import Map
 
 class Wrapper():
-  '''MindGo 平台 Wrapper。回测中使用方法：
-  w = Wrapper(globals(), config)
-  w.takeown()
-  '''
+  '''MindGo 平台 Wrapper。'''
+  ################################
+  # 获取数据
+
+  def get_current_price(self, symbol):
+    return self.data.current(symbol).open
+
+  def is_paused(self, symbol):
+    return self.data.current(symbol).is_paused
+
+  ################################
+  # 操作股票
+
   def create_portfolio(self, symbol, share_pool=True):
     '''准备给某支股票建仓'''
     self.portfolios[symbol] = Portfolio(symbol)
@@ -23,10 +32,16 @@ class Wrapper():
   def remove_portfolio(self, symbol):
     '''准备卖光某支股票'''
     try:
-      self.portfolios[symbol].object_value = 0
-      self.portfolios[symbol].removed = True
+      self.portfolios[symbol].prepare_remove()
     except KeyError:
-      self.log.warn("尝试卖空无仓位信息的股票：{}".format(symbol))
+      self.log.error("尝试卖空无仓位信息的股票：{}".format(symbol))
+
+  def update_portfolio_object_value(self, symbol, new_object_value):
+    '''更新某支股票的目标持仓'''
+    try:
+      self.portfolios[symbol].set_new_object(new_object_value)
+    except KeyError:
+      self.log.error("尝试更新无仓位信息的股票：{}".format(symbol))
 
   def set_portfolios(self, symbols):
     '''批量更新选股信息'''
@@ -39,20 +54,33 @@ class Wrapper():
 
   def _update_portfolios_data(self):
     '''更新各股票的数据'''
-    for key, value in self.account.positions:
-      if key not in self.portfolios:
-        self.log.warn("MindGoWrapper 股票信息失去同步，正在重建信息：{}".format(key))
-        self.create_portfolio(key, share_pool=False)
-      self.portfolios[key].has_value = value.position_value
-    for key, value in self.portfolios:
-      if value.has_value == 0 and value.removed:
-        del self.portfolios[key]
+    for symbol, position in self.account.positions:
+      if symbol not in self.portfolios:
+        self.log.warn("股票 {} 信息失去同步，正在重建信息……".format(symbol))
+        self.create_portfolio(symbol, share_pool=False)
+      self.portfolios[symbol].has_value = position.position_value
+      self.portfolios[symbol].cost = position.cost_basis
+    for symbol, portfolio in self.portfolios:
+      if portfolio.has_value == 0 and portfolio.removed:
+        del self.portfolios[symbol]
 
   def _try_purchases(self):
     '''尝试调仓'''
-    for key, value in self.portfolios:
-      callback = partial(self.platform_apis.order_target_value, key)
-      value.try_purchase(callback)
+    for symbol, portfolio in self.portfolios:
+      id = self.platform_apis.order_target_value(symbol, portfolio.object_value)
+      portfolio.orders.append(id)
+
+  def _monitor_orders(self):
+    '''监视订单完成情况，订单一旦完成就更新个股信息'''
+    for symbol, portfolio in self.portfolios:
+      open_orders = [x.id for x in self.platform_apis.get_open_orders(symbol)]
+      for order_id in portfolio.orders:
+        if order_id not in open_orders:
+          portfolio.new_finished_order(get_order(order_id), self.get_current_price(symbol))
+          portfolio.orders.remove(order_id)
+
+  ################################
+  # MindGo 平台相关
 
   def _mindgo_initialize(self, account):
     '''在回测平台初始化时运行'''
@@ -70,6 +98,7 @@ class Wrapper():
     self.scheduler.check(self.days, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
     self._update_portfolios_data()
     self._try_purchases()
+    self._monitor_orders()
     self.scheduler.check(self.days, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
 
   def _mindgo_before_trading_start(self, account, data):

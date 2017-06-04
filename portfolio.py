@@ -1,25 +1,48 @@
-class Portfolio():
-    def __init__(self, symbol):
+from .map import Map
+import logging
+
+log = logging.getLogger("MindGoWrapper.Portfolio")
+
+class Portfolio(Map):
+    def __init__(self, symbol, cash_pool, initial_purchase):
+        '''股票，所有参数为价格'''
         # 股票号码
         self.symbol = symbol
-        # 现金池
-        self.cash_pool = 0
-        # 允许买入的最大总价格
-        self.total_price_limit = 0
+        # 初始现金池
+        self.initial_cash_pool = cash_pool
+        # 当前现金池
+        self.cash_pool = cash_pool - initial_purchase
         # 当前总价值
         self.has_value = 0
+        # 持股成本
+        self.cost = 0
         # 目标持股价值
-        self.object_value = 0
-        # 是否为等待空仓状态
+        self.object_value = initial_purchase
+        # 是否为等待卖空扔掉状态
         self.removed = False
+        # 未完成的交易
+        self.orders = []
+        log.debug('新股票：{} 初始持仓 {} 元'.format(self.symbol, self.initial_cash_pool))
 
-    def try_purchase(purchase_callback, object_value=None):
-        '''尝试调仓
-        purchase_callback(value)：按持仓价格调仓的函数
-        object_value：新的目标持仓（可选）
-        '''
-        if object_value != None:
-            self.object_value = object_value
-        # 尝试调仓
-        purchase_callback(target)
-        
+    def set_new_object(self, new_object_value):
+        '''设置新的目标持仓'''
+        self.object_value = new_object_value
+        log.debug('新持仓目标：{} {} 元'.format(self.symbol, self.object_value))
+
+    def new_finished_order(self, order, current_price):
+        '''产生新订单，重新计算相关参数
+        order：一个 order 对象
+        current_price：成交时股票单价'''
+        if order.symbol == self.symbol:
+            price_delta = order.filled * current_price - order.commission
+            if order.filled < 0:
+                price_delta -= order.tax
+            self.cash_pool += price_delta
+            log.debug('新订单：{} {} 股，价格变化 {} 元，当前现金池 {} 元，持仓 {} 元'.format(self.symbol, order.filled, price_delta, self.cash_pool, self.object_value))
+        else:
+            log.error('股票代码 {} 和订单中的股票代码 {} 不符'.format(self.symbol, order.symbol))
+
+    def prepare_remove(self):
+        '''准备卖空该股票'''
+        self.object_value = 0
+        self.removed = True
