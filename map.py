@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# MindGoWrapper
+# by James Swineson, 2017-06
+# https://github.com/Jamesits/MindGoWrapper
+
 class Map(dict):
     """
     A dot-notation accessable dict type.

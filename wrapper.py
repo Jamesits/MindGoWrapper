@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# MindGoWrapper
+# by James Swineson, 2017-06
+# https://github.com/Jamesits/MindGoWrapper
+
 from .scheduler import Scheduler
 from .portfolio import Portfolio
 import logging
@@ -136,7 +141,6 @@ class Wrapper():
     self.date = None
     # 日志工具
     self.log = logging.getLogger("MindGoWrapper")
-    self.log.setLevel(logging.INFO)
     self.log.info('https://github.com/Jamesits/MindGoWrapper')
 
   def takeown(self, platform_apis, config):
