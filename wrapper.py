@@ -86,8 +86,8 @@ class Wrapper():
     '''监视订单完成情况，订单一旦完成就更新个股信息'''
     for symbol, portfolio in self.portfolios.items():
       open_order_objs = self.platform_apis.get_open_orders(symbol)
-      if open_order_objs != None:
-        open_orders = [x.id for x in open_order_objs]
+      open_orders = [x.id for x in open_order_objs]
+      if len(open_orders) > 0:
         for order_id in portfolio.orders:
           if order_id not in open_orders:
             order = self.platform_apis.get_order(order_id)
