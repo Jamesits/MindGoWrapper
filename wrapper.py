@@ -87,8 +87,12 @@ class Wrapper():
       open_orders = [x.id for x in self.platform_apis.get_open_orders(symbol)]
       for order_id in portfolio.orders:
         if order_id not in open_orders:
-          portfolio.new_finished_order(self.platform_apis.get_order(order_id), self.get_current_price(symbol))
-          portfolio.orders.remove(order_id)
+          order = self.platform_apis.get_order(order_id)
+          if order != None:
+            portfolio.new_finished_order(order, self.get_current_price(symbol))
+            portfolio.orders.remove(order_id)
+          else:
+            self.log.error('无法获取订单 {}'.format(order_id))
 
   ################################
   # MindGo 平台相关
