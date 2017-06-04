@@ -30,7 +30,7 @@ class Wrapper():
     self.log.setLevel(logging.DEBUG)
 
   def takeown(self):
-    print('MindGoWrapper\nhttps://github.com/Jamesits/MindGoWrapper')
+    self.log.info('MindGoWrapper\nhttps://github.com/Jamesits/MindGoWrapper')
     # takeown all MindGo callback functions
     global initialize
     global handle_data
