@@ -20,13 +20,33 @@ class Wrapper():
       # 初始建仓：现金池百分比
       self.portfolios[symbol].object_value = self.portfolios[symbol].cash_pool * self.config.timing.initial_purchase
 
+  def remove_portfolio(self, symbol):
+    '''准备卖光某支股票'''
+    try:
+      self.portfolios[symbol].object_value = 0
+      self.portfolios[symbol].removed = True
+    except KeyError:
+      self.log.warn("尝试卖空无仓位信息的股票：{}".format(symbol))
+
+  def set_portfolios(self, symbols):
+    '''批量更新选股信息'''
+    for s in symbols:
+      if s not in symbols:
+        self.create_portfolio(s)
+    for s in self.portfolios:
+      if s not in symbols:
+        self.remove_portfolio(s)
+
   def _update_portfolios_data(self):
     '''更新各股票的数据'''
     for key, value in self.account.positions:
       if key not in self.portfolios:
+        self.log.warn("MindGoWrapper 股票信息失去同步，正在重建信息：{}".format(key))
         self.create_portfolio(key, share_pool=False)
-
       self.portfolios[key].has_value = value.position_value
+    for key, value in self.portfolios:
+      if value.has_value == 0 and value.removed:
+        del self.portfolios[key]
 
   def _try_purchases(self):
     '''尝试调仓'''
@@ -65,15 +85,13 @@ class Wrapper():
     self.log.debug('_mindgo_after_trading_end')
     self.scheduler.check(self.days, Scheduler.Unit.DAY, Scheduler.Slot.AFTER)
 
-  def __init__(self, platform_apis, config):
-    '''Wrapper 对象初始化
-    platform_apis 参数为回测环境的 globals() 返回值
-    config 是一个 Map 对象，保存全局配置'''
+  def __init__(self):
+    '''Wrapper 对象初始化'''
     self.scheduler = Scheduler()
     # 一个可读写的全局变量字典
-    self.callbacks = platform_apis
-    # 一个只读的全局变量字典
-    self.platform_apis = Map(platform_apis)
+    self.callbacks = None
+    # 一个只读的全局变量字典（Map 类型）
+    self.platform_apis = None
     # 全局配置
     self.config = config
     # MindGo 平台给的公共对象
@@ -89,10 +107,20 @@ class Wrapper():
     self.log.setLevel(logging.INFO)
     self.log.info('https://github.com/Jamesits/MindGoWrapper')
 
-  def takeown(self):
-    '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数'''
+  def takeown(self, platform_apis, config):
+    '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
+    platform_apis 参数为回测环境的 globals() 返回值
+    config 是一个 Map 对象，保存全局配置'''
+    # 一个可读写的全局变量字典
+    self.callbacks = platform_apis
+    # 一个只读的全局变量字典
+    self.platform_apis = Map(platform_apis)
+    # 全局配置
+    self.config = config
+
     self.callbacks['initialize'] = self._mindgo_initialize
     self.callbacks['handle_data'] = self._mindgo_handle_data
     self.callbacks['before_trading_start'] = self._mindgo_before_trading_start
     self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
+
     self.log.debug('takeown finished')

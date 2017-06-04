@@ -10,6 +10,8 @@ class Portfolio():
         self.has_value = 0
         # 目标持股价值
         self.object_value = 0
+        # 是否为等待空仓状态
+        self.removed = False
 
     def try_purchase(purchase_callback, object_value=None):
         '''尝试调仓
