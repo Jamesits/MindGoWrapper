@@ -8,6 +8,7 @@ from .portfolio import Portfolio
 import logging
 from functools import partial
 from .map import Map
+import datetime
 
 class Wrapper():
   '''MindGo 平台 Wrapper。'''
@@ -139,6 +140,7 @@ class Wrapper():
 
   def __init__(self):
     '''Wrapper 对象初始化'''
+    # 定时任务管理
     self.scheduler = Scheduler()
     # 一个可读写的全局变量字典
     self.callbacks = None
@@ -151,11 +153,12 @@ class Wrapper():
     self.data = None
     # 当前持股情况
     self.portfolios = {}
-    # 日期计数器
+    # 定时任务计数器
     self.ticks = -1
     self.days = -1
-    self.date = None
-    # 日志工具
+    # 回测日期
+    self.date = datetime.datetime.now()
+    # 日志
     self.log = logging.getLogger("MindGoWrapper")
     self.log.info('https://github.com/Jamesits/MindGoWrapper')
 
