@@ -93,7 +93,7 @@ class Wrapper():
             portfolio.new_finished_order(order, self.get_current_price(symbol))
             portfolio.orders.remove(order_id)
           else:
-            self.log.error('无法获取订单 {}'.format(order_id))
+            self.log.error('无法获取订单 {}，当前未完成订单：{}'.format(order_id, open_orders))
 
   ################################
   # MindGo 平台相关
