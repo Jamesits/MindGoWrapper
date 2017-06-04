@@ -38,5 +38,5 @@ class Wrapper():
     global after_trading_end
     initialize = self._mindgo_initialize
     handle_data = self._mindgo_handle_data
-    before_trading_start = self.before_trading_start
+    before_trading_start = self._mindgo_before_trading_start
     after_trading_end = self.after_trading_end
