@@ -88,9 +88,11 @@ class Wrapper():
         for symbol, portfolio in self.portfolios.items():
             object_value = portfolio.object_value
             # 不能做空
-            if object_value < 0: object_value = 0
+            if object_value < 0:
+                object_value = 0
             if not (self.is_paused(symbol) or object_value == portfolio.has_value):
-                id = self.platform_apis.order_target_value(symbol, object_value)
+                id = self.platform_apis.order_target_value(
+                    symbol, object_value)
                 portfolio.orders.append(id)
 
     def _monitor_orders(self):
