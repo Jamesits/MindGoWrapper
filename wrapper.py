@@ -27,7 +27,7 @@ class Wrapper():
     ################################
     # 操作股票
 
-    def create_portfolio(self, symbol, share_pool=True):
+    def create_portfolio(self, symbol):
         '''准备给某支股票建仓'''
         self.portfolios[symbol] = Portfolio(
             symbol,

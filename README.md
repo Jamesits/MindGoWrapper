@@ -57,3 +57,53 @@ w.scheduler.schedule(callback_function, Scheduler.timeslot([0, 10], 22, Schedule
 # initialize MindGo platform
 w.takeown(globals(), config)
 ```
+
+## API Doc
+
+```python
+from MindGoWrapper.wrapper import Wrapper
+w = Wrapper()
+
+# initialize platform, execute anywhere in the backtest code
+w.takeown() 
+
+# get stock information
+w.get_current_price(symbol)
+w.is_paused(symbol)
+
+# prepare to buy
+w.create_portfolio(symbol)
+
+# prepare to sell out
+w.remove_portfolio(symbol)
+
+# get a Portfolio object
+w.get_portfolio_detail(symbol)
+
+# set purchase goal
+w.update_portfolio_object_value(symbol, goal_value)
+
+# batch prepare
+# buy in everything in the list
+# sell out everything not in the list
+w.set_portfolios([symbol_list])
+
+from MindGoWrapper.map import Map
+
+# an object whose attributes can be accessed in both dict style and dot notation
+m = Map({dict}, key=value)
+m['key']
+m.key
+
+from MindGoWrapper.scheduler import Scheduler
+
+# run at 1st and 11th day every 22 days
+# Unit: DAY or TICK (tick is the minimum frequency of backtest)
+# Slot: BEFORE or AFTER all transaction happens
+w.scheduler.schedule(callback, Scheduler.timeslot([0, 10], 22, Scheduler.Unit.DAY, Scheduler.Slot.BEFORE))
+
+# Other functions
+
+# Iterate through a pandas.Dataframe df by ascending/descending sequence of seq
+MindGoWrapper.utils.df_iter(df, seq, rank=False, ascending=True)
+``` 
