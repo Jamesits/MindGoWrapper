@@ -4,18 +4,20 @@ Some wrapper for sh*t quant platform MindGo.
 
 ## Usage
 
-Reset kernel every time before running. (`pwd` changes every time backtest is run.)
+In backtest panel: Run Cell 0 from a Jupyter notebook in root directory then you are ready to go.
+
+In Jupyter notebook: Reset kernel every time before running. (`pwd` changes every time backtest is run.) Then use the following code.
 
 ### Cell 0
 
-Assume your Jupyter notebook is in the root folder:
+Assume your Jupyter notebook is in the root directory:
 
 ```shell
 !git clone https://github.com/Jamesits/MindGoWrapper.git
 !sh -c "cd MindGoWrapper; git pull"
 ```
 
-Non-root `pwd` is more complicated; you may not be able to use it in backtest panel. 
+Non-root `pwd` is more complicated; you may not be able to use it in backtest panel. You can dig them out yourself; try not get lost in someone's home directory. ;)
 
 ### Cell 1
 
@@ -60,7 +62,7 @@ w.takeown(globals(), config)
 
 ## API Doc
 
-Note: all `symbol` is in the form of `000001.SH`.
+Note: all `symbol` is in the form of `"000001.SH"`.
 
 ```python
 from MindGoWrapper.wrapper import Wrapper
