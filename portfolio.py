@@ -14,7 +14,7 @@ class Portfolio(Map):
 
     def __init__(self, symbol, cash_pool, initial_purchase):
         '''股票，所有参数为价格'''
-        super.init()
+        super().__init__()
         # 股票号码
         self.symbol = symbol
         # 初始现金池
