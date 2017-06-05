@@ -60,6 +60,8 @@ w.takeown(globals(), config)
 
 ## API Doc
 
+Note: all `symbol` is in the form of `000001.SH`.
+
 ```python
 from MindGoWrapper.wrapper import Wrapper
 w = Wrapper()
@@ -70,6 +72,27 @@ w.takeown()
 # get stock information
 w.get_current_price(symbol)
 w.is_paused(symbol)
+
+# useful attributes
+
+# a Scheduler object
+self.scheduler = Scheduler()
+# All global functions available in global backtest environment
+self.platform_apis
+# the config object in w.takeown
+self.config
+# backtest environment public objects
+self.account
+self.data
+# what you have for now, dict of symbol: Portfolio
+self.portfolios
+# How many time passed
+self.ticks
+self.days
+# current (emulated) date and time
+self.date
+# a logger object
+self.log
 
 # prepare to buy
 w.create_portfolio(symbol)
