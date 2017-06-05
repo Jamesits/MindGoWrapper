@@ -3,12 +3,14 @@
 # by James Swineson, 2017-06
 # https://github.com/Jamesits/MindGoWrapper
 
+
 class Map(dict):
     """
     A dot-notation accessable dict type.
     Example:
     m = Map({'first_name': 'Eduardo'}, last_name='Pool', age=24, sports=['Soccer'])
     """
+
     def __init__(self, *args, **kwargs):
         super(Map, self).__init__(*args, **kwargs)
         for arg in args:

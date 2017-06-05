@@ -3,6 +3,7 @@
 # by James Swineson, 2017-06
 # https://github.com/Jamesits/MindGoWrapper
 
+
 def df_iter(df, seq, rank=False, ascending=True):
     '''遍历 dataframe 的每个下标，可选使用数值或者排名'''
     for f in df:

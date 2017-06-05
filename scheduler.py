@@ -6,6 +6,7 @@
 from enum import Enum
 from collections import Iterable
 
+
 class Scheduler():
     class Unit(Enum):
         '''时间单位'''
@@ -27,9 +28,11 @@ class Scheduler():
         ret = []
         try:
             for p in position:
-                ret.append({'position': p, 'length': length, 'unit': unit, 'slot': slot})
+                ret.append({'position': p, 'length': length,
+                            'unit': unit, 'slot': slot})
         except TypeError:
-            ret = [{'position': position, 'length': length, 'unit': unit, 'slot': slot}]
+            ret = [{'position': position, 'length': length,
+                    'unit': unit, 'slot': slot}]
 
         return ret
 
@@ -40,7 +43,7 @@ class Scheduler():
         for t in timeslots:
             t['callback'] = callback
             self.schedules.append(t)
-    
+
     def check(self, count, unit, slot):
         for s in self.schedules:
             if s['unit'] == unit and s['slot'] == slot and count % s['length'] == s['position']:
