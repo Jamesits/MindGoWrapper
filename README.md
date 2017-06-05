@@ -78,23 +78,23 @@ w.is_paused(symbol)
 # useful attributes
 
 # a Scheduler object
-self.scheduler = Scheduler()
+w.scheduler = Scheduler()
 # All global functions available in global backtest environment
-self.platform_apis
+w.platform_apis
 # the config object in w.takeown
-self.config
+w.config
 # backtest environment public objects
-self.account
-self.data
+w.account
+w.data
 # what you have for now, dict of symbol: Portfolio
-self.portfolios
+w.portfolios
 # How many time passed
-self.ticks
-self.days
+w.ticks
+w.days
 # current (emulated) date and time
-self.date
+w.date
 # a logger object
-self.log
+w.log
 
 # prepare to buy
 w.create_portfolio(symbol)
