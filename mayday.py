@@ -34,7 +34,7 @@ Date: {}, Days = {}, Ticks = {}, Additional message: {}
         )
         if detect_runtime() == 'strategy':
             # 如果在回测环境下，只能用平台提供的 log 函数
-            self.platform_apis.log.info(logstr)
+            self.wrapper.platform_apis.log.info("MindGoWrapper critical: " + logstr)
         else:
             # 否则用 logging 库
             self.log.critical(logstr)
