@@ -66,7 +66,10 @@ Note: all `symbol` is in the form of `"000001.SH"`.
 
 ```python
 from MindGoWrapper.wrapper import Wrapper
-w = Wrapper()
+
+# create Wrapper object
+# if mask_all_exceptions=True, program will continue to run if a exception is thrown inside a scheduler task.
+w = Wrapper(mask_all_exceptions=False)
 
 # initialize platform, execute anywhere in the backtest code
 w.takeown() 
