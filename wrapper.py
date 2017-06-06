@@ -216,6 +216,8 @@ class Wrapper():
         else:
             # 否则用 logging 库
             self.log.info(s)
+            # 但是有可能检测失败所以多打一遍
+            self.platform_apis.log.info(s)
 
     def takeown(self, platform_apis, config):
         '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
