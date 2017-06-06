@@ -36,6 +36,9 @@ class Portfolio(Map):
 
     def set_new_object(self, new_object_value):
         '''设置新的目标持仓'''
+        if new_object_value == None:
+            log.warning('%s 购买量为 None', self.symbol)
+            return
         if new_object_value > self.cash_pool + self.has_value:
             # 如果目标超过最大允许购买量
             log.warning('%s 购买量 %f 超出最大允许购买量 %f', self.symbol,
