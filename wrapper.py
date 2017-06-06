@@ -198,6 +198,6 @@ class Wrapper():
         self.callbacks['before_trading_start'] = self._mindgo_before_trading_start
         self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
 
-        self.log.info(welcome_string)
-        self.platform_apis.log.info(welcome_string)
+        self.log.info(self.welcome_string)
+        self.platform_apis.log.info(self.welcome_string)
         self.log.debug('takeown finished')
