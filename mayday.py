@@ -23,7 +23,7 @@ class Mayday():
             self.wrapper.ticks,
             e_type,
             e_value,
-            e_traceback
+            e_traceback,
         )
         # Output twice using logging module and platform's log function
         self.log.error(logstr)
