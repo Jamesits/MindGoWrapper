@@ -127,7 +127,8 @@ class Wrapper():
             self.date = self.account.start_date
         except:
             self.mayday.log_exception("_mindgo_initialize", sys.exc_info())
-            raise
+            if not self.mask_all_exceptions:
+                raise
 
     def _mindgo_handle_data(self, account, data):
         '''每个交易 tick 运行一次'''
@@ -146,7 +147,8 @@ class Wrapper():
                 self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
         except:
             self.mayday.log_exception("_mindgo_handle_data", sys.exc_info())
-            raise
+            if not self.mask_all_exceptions:
+                raise
 
     def _mindgo_before_trading_start(self, account, data):
         '''每个交易日之前运行'''
@@ -160,7 +162,8 @@ class Wrapper():
         except:
             self.mayday.log_exception(
                 "_mindgo_before_trading_start", sys.exc_info())
-            raise
+            if not self.mask_all_exceptions:
+                raise
 
     def _mindgo_after_trading_end(self, account, data):
         '''每个交易日结束后运行'''
@@ -173,9 +176,10 @@ class Wrapper():
         except:
             self.mayday.log_exception(
                 "_mindgo_after_trading_end", sys.exc_info())
-            raise
+            if not self.mask_all_exceptions:
+                raise
 
-    def __init__(self):
+    def __init__(self, mask_all_exceptions=False):
         '''Wrapper 对象初始化'''
         # 定时任务管理
         self.scheduler = Scheduler()
@@ -200,6 +204,10 @@ class Wrapper():
 
         # 异常处理拦截
         self.mayday = Mayday(self)
+        # 静默处理所有异常
+        self.mask_all_exceptions = mask_all_exceptions
+        if self.mask_all_exceptions:
+            self.log.warning("错误处理模式已设置为静默处理所有异常。建议不要在调试环境中使用该选项。")
 
     def takeown(self, platform_apis, config):
         '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
