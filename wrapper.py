@@ -11,6 +11,7 @@ from .scheduler import Scheduler
 from .portfolio import Portfolio
 from .mayday import Mayday
 from .map import Map
+from .utils import *
 
 
 class Wrapper():
@@ -206,8 +207,15 @@ class Wrapper():
         self.mayday = Mayday(self)
         # 静默处理所有异常
         self.mask_all_exceptions = mask_all_exceptions
-        if self.mask_all_exceptions:
-            self.log.warning("错误处理模式已设置为静默处理所有异常。建议不要在调试环境中使用该选项。")
+
+    def _print(self, s):
+        '''输出字符串。会自动判断是在什么环境当中，使用合适的方法输出。'''
+        if detect_runtime() == 'strategy':
+            # 如果在回测环境下，只能用平台提供的 log 函数
+            self.platform_apis.log.info(s)
+        else:
+            # 否则用 logging 库
+            self.log.info(s)
 
     def takeown(self, platform_apis, config):
         '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
@@ -225,6 +233,7 @@ class Wrapper():
         self.callbacks['before_trading_start'] = self._mindgo_before_trading_start
         self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
 
-        self.log.info(self.welcome_string)
-        self.platform_apis.log.info(self.welcome_string)
+        self._print(self.welcome_string)
+        if self.mask_all_exceptions:
+            self._print("异常处理模式已设置为静默处理所有异常。建议不要在调试环境中使用该选项。")
         self.log.debug('takeown finished')
