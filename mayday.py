@@ -22,14 +22,14 @@ class Mayday():
     def log_exception(self, additional_message, exc_info):
         # Construct log string
         logstr = '''%%% Unhandled exception %%%
-        Date: {}, Days = {}, Ticks = {}, Additional message: {}
-        {}
-        '''.format(
+Date: {}, Days = {}, Ticks = {}, Additional message: {}
+{}'''.format(
             self.wrapper.date.strftime("%Y-%m-%d"),
             self.wrapper.days,
             self.wrapper.ticks,
             additional_message,
-            "".join(traceback.format_exception(exc_info[0], exc_info[1], exc_info[2])),
+            "".join(traceback.format_exception(
+                exc_info[0], exc_info[1], exc_info[2])),
         )
         # Output twice using logging module and platform's log function
         self.log.critical(logstr)
