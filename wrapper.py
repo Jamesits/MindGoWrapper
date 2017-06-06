@@ -180,7 +180,7 @@ class Wrapper():
         self.log = logging.getLogger("MindGoWrapper")
 
         # 异常处理拦截
-        self.mayday = Mayday()
+        self.mayday = Mayday(self)
 
     def takeown(self, platform_apis, config):
         '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
