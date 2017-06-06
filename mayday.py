@@ -39,4 +39,3 @@ Date: {}, Days = {}, Ticks = {}, Additional message: {}
         sys.excepthook = self.__excepthook
         self.wrapper = wrapper
         self.log = logging.getLogger("MindGoWrapper.Mayday")
-        self.log.info("MindGoWrapper Mayday initialized")
