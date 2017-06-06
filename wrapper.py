@@ -3,16 +3,19 @@
 # by James Swineson, 2017-06
 # https://github.com/Jamesits/MindGoWrapper
 
-from .scheduler import Scheduler
-from .portfolio import Portfolio
 import logging
 from functools import partial
-from .map import Map
 import datetime
+from .scheduler import Scheduler
+from .portfolio import Portfolio
+from .mayday import Mayday
+from .map import Map
 
 
 class Wrapper():
     '''MindGo 平台 Wrapper。'''
+
+    welcome_string = 'https://github.com/Jamesits/MindGoWrapper'
     ################################
     # 获取数据
 
@@ -175,7 +178,9 @@ class Wrapper():
         self.date = datetime.datetime.now()
         # 日志
         self.log = logging.getLogger("MindGoWrapper")
-        self.log.info('https://github.com/Jamesits/MindGoWrapper')
+
+        # 异常处理拦截
+        self.mayday = Mayday()
 
     def takeown(self, platform_apis, config):
         '''劫持 MindGo 平台的回测回调函数，自动调用当前 Wrapper 对象的相应函数，获得回测控制权。
@@ -193,4 +198,6 @@ class Wrapper():
         self.callbacks['before_trading_start'] = self._mindgo_before_trading_start
         self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
 
+        self.log.info(welcome_string)
+        self.platform_apis.log.info(welcome_string)
         self.log.debug('takeown finished')
