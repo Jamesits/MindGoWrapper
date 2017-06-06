@@ -29,7 +29,7 @@ class Mayday():
             self.wrapper.days,
             self.wrapper.ticks,
             additional_message,
-            traceback.format_exception(exc_info)
+            traceback.format_exception(exc_info[0], exc_info[1], exc_info[2])
         )
         # Output twice using logging module and platform's log function
         self.log.critical(logstr)
