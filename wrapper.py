@@ -6,6 +6,7 @@
 import logging
 from functools import partial
 import datetime
+import sys
 from .scheduler import Scheduler
 from .portfolio import Portfolio
 from .mayday import Mayday
@@ -120,41 +121,59 @@ class Wrapper():
 
     def _mindgo_initialize(self, account):
         '''在回测平台初始化时运行'''
-        self.account = account
-        self.log.debug('_mindgo_initialize')
-        self.date = self.account.start_date
+        try:
+            self.account = account
+            self.log.debug('_mindgo_initialize')
+            self.date = self.account.start_date
+        except:
+            self.mayday.log_exception("_mindgo_initialize", sys.exc_info())
+            raise
 
     def _mindgo_handle_data(self, account, data):
         '''每个交易 tick 运行一次'''
-        self.account = account
-        self.data = data
-        self.ticks += 1
-        self.date = self.platform_apis.get_datetime()
-        self.log.debug('_mindgo_handle_data')
-        self.scheduler.check(
-            self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
-        self._update_portfolios_data()
-        self._try_purchases()
-        self._monitor_orders()
-        self.scheduler.check(
-            self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
+        try:
+            self.account = account
+            self.data = data
+            self.ticks += 1
+            self.date = self.platform_apis.get_datetime()
+            self.log.debug('_mindgo_handle_data')
+            self.scheduler.check(
+                self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.BEFORE)
+            self._update_portfolios_data()
+            self._try_purchases()
+            self._monitor_orders()
+            self.scheduler.check(
+                self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
+        except:
+            self.mayday.log_exception("_mindgo_handle_data", sys.exc_info())
+            raise
 
     def _mindgo_before_trading_start(self, account, data):
         '''每个交易日之前运行'''
-        self.account = account
-        self.data = data
-        self.days += 1
-        self.log.debug('_mindgo_before_trading_start')
-        self.scheduler.check(self.days, Scheduler.Unit.DAY,
-                             Scheduler.Slot.BEFORE)
+        try:
+            self.account = account
+            self.data = data
+            self.days += 1
+            self.log.debug('_mindgo_before_trading_start')
+            self.scheduler.check(self.days, Scheduler.Unit.DAY,
+                                 Scheduler.Slot.BEFORE)
+        except:
+            self.mayday.log_exception(
+                "_mindgo_before_trading_start", sys.exc_info())
+            raise
 
     def _mindgo_after_trading_end(self, account, data):
         '''每个交易日结束后运行'''
-        self.account = account
-        self.data = data
-        self.log.debug('_mindgo_after_trading_end')
-        self.scheduler.check(self.days, Scheduler.Unit.DAY,
-                             Scheduler.Slot.AFTER)
+        try:
+            self.account = account
+            self.data = data
+            self.log.debug('_mindgo_after_trading_end')
+            self.scheduler.check(self.days, Scheduler.Unit.DAY,
+                                 Scheduler.Slot.AFTER)
+        except:
+            self.mayday.log_exception(
+                "_mindgo_after_trading_end", sys.exc_info())
+            raise
 
     def __init__(self):
         '''Wrapper 对象初始化'''
