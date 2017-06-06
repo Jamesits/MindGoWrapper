@@ -11,6 +11,9 @@ class Mayday():
     '''MindGoWrapper 的自定义未处理异常输出'''
 
     def __excepthook(self, e_type, e_value, e_traceback):
+        if issubclass(e_type, KeyboardInterrupt):
+            sys.__excepthook__(e_type, e_value, e_traceback)
+            return
         # Construct log string
         logstr = '''%%% Unhandled exception %%%
         Date: {}, Days = {}, Ticks = {}
