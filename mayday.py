@@ -6,6 +6,7 @@
 import sys
 import logging
 import traceback
+from .utils import detect_runtime
 
 
 class Mayday():
@@ -31,9 +32,12 @@ Date: {}, Days = {}, Ticks = {}, Additional message: {}
             "".join(traceback.format_exception(
                 exc_info[0], exc_info[1], exc_info[2])),
         )
-        # Output twice using logging module and platform's log function
-        self.log.critical(logstr)
-        self.wrapper.platform_apis.log.info(logstr)
+        if detect_runtime() == 'strategy':
+            # 如果在回测环境下，只能用平台提供的 log 函数
+            self.platform_apis.log.info(logstr)
+        else:
+            # 否则用 logging 库
+            self.log.critical(logstr)
 
     def __init__(self, wrapper):
         sys.excepthook = self.__excepthook

@@ -11,7 +11,7 @@ from .scheduler import Scheduler
 from .portfolio import Portfolio
 from .mayday import Mayday
 from .map import Map
-from .utils import *
+from .utils import detect_runtime
 
 
 class Wrapper():
