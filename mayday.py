@@ -31,7 +31,7 @@ class Mayday():
     def log_exception(self, additional_message, exc_info, do_callback=True):
         # Construct log string
         try:
-            current_date = self.wrapper.date.strftime("%Y-%m-%d")
+            current_date = self.wrapper.date.strftime("%Y-%m-%d %H:%M:%S")
         except AttributeError:
             current_date = "Unable to get current date"
         logstr = '''%%% Unhandled exception %%% Session: {}
