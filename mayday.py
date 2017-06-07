@@ -77,3 +77,6 @@ OS: {},Python: {},pwd: {}
         self.session_id = uuid.uuid1()
         # register interpreter exit handler
         atexit.register(self.__exithook)
+        # output session id
+        self.wrapper.platform_apis.log.info("Session ID: {}".format(self.session_id))
+        self.log.info("Session ID: %s", self.session_id)
