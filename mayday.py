@@ -26,10 +26,11 @@ class Mayday():
 
     def log_exception(self, additional_message, exc_info):
         # Construct log string
-        logstr = '''%%% Unhandled exception %%%
+        logstr = '''%%% Unhandled exception %%% Session: {}
 Date: {}, Days: {}, Ticks: {}, Additional message: {}
 OS: {},Python: {},pwd: {}
 {}'''.format(
+            self.session_id,
             self.wrapper.date.strftime("%Y-%m-%d"),
             self.wrapper.days,
             self.wrapper.ticks,
@@ -48,7 +49,7 @@ OS: {},Python: {},pwd: {}
             # 否则用 logging 库
             self.log.critical(logstr)
         if callable(log_callback):
-            log_callback(additional_message, exc_info, logstr)
+            log_callback(session_id, additional_message, exc_info, logstr)
 
     def set_log_callback(func):
         self.log_callback = func
@@ -57,7 +58,7 @@ OS: {},Python: {},pwd: {}
         sys.excepthook = self.__excepthook
         self.wrapper = wrapper
         self.log = logging.getLogger("MindGoWrapper.Mayday")
-        # log_callback = function(additional_message, exc_info, log_message)
+        # log_callback = function(session_id, additional_message, exc_info, log_message)
         self.log_callback = log_callback
         # random session id
         self.session_id = uuid.uuid1()
