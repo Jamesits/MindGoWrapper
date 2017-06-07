@@ -1,6 +1,16 @@
 # MindGoWrapper
 
-Some wrapper for sh*t quant platform MindGo.
+Some wrapper for sh*t quant platform MindGo. 
+
+主要解决辣鸡同花顺 MindGo 量化平台的几大问题：
+
+ * 日志打不完
+ * 异常全被回测框架抓住然后到处乱抛
+ * 日志不输出异常 Stacktrace
+ * API 接口格式不确定
+ * API 内部错误被回测框架抓住以后看不到具体哪里出错
+
+以及实现了自动重启程序的 supervisor 类似功能。
 
 ## Usage
 
@@ -64,6 +74,8 @@ w.takeown(globals(), config)
 
 Note: all `symbol` is in the form of `"000001.SH"`.
 
+### Initialization
+
 ```python
 from MindGoWrapper.wrapper import Wrapper
 
@@ -74,6 +86,15 @@ w = Wrapper(mask_all_exceptions=False)
 # initialize platform, execute anywhere in the backtest code
 w.takeown() 
 
+# collect telemetry information to other service for debugging and logging
+def exc_callback(session_id, additional_message, exc_info, log_message):
+    send_mail(log_message)
+w.mayday.set_log_callback(exc_callback)
+```
+
+### APIs
+
+```python
 # get stock information
 w.get_current_price(symbol)
 w.is_paused(symbol)
