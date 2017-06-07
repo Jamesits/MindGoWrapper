@@ -55,7 +55,7 @@ OS: {},Python: {},pwd: {}
         if callable(self.log_callback):
             try:
                 self.log_callback(
-                    session_id, additional_message, exc_info, logstr)
+                    self.session_id, additional_message, exc_info, logstr)
             except:
                 self.log_exception(
                     "MindGoWrapper.Mayday.log_exception.callback", sys.exc_info(), do_callback=False)
