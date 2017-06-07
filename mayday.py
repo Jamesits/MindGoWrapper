@@ -51,7 +51,7 @@ OS: {},Python: {},pwd: {}
         if callable(log_callback):
             log_callback(session_id, additional_message, exc_info, logstr)
 
-    def set_log_callback(func):
+    def set_log_callback(self, func):
         self.log_callback = func
 
     def __init__(self, wrapper, log_callback=None):
