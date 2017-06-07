@@ -157,6 +157,7 @@ class Wrapper():
             self.account = account
             self.data = data
             self.days += 1
+            self.date = self.platform_apis.get_datetime()
             self.log.debug('_mindgo_before_trading_start')
             self.scheduler.check(self.days, Scheduler.Unit.DAY,
                                  Scheduler.Slot.BEFORE)
@@ -171,6 +172,7 @@ class Wrapper():
         try:
             self.account = account
             self.data = data
+            self.date = self.platform_apis.get_datetime()
             self.log.debug('_mindgo_after_trading_end')
             self.scheduler.check(self.days, Scheduler.Unit.DAY,
                                  Scheduler.Slot.AFTER)
@@ -236,7 +238,7 @@ class Wrapper():
         self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
 
         self._print(self.welcome_string)
-        self._print("Session ID: {}".format(self.mayday.session_id))
+        self._print("Session ID: date{}".format(self.mayday.session_id))
         if self.mask_all_exceptions:
             self._print("异常处理模式已设置为静默处理所有异常。建议不要在调试环境中使用该选项。")
         self.log.debug('takeown finished')
