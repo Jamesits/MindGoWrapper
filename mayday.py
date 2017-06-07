@@ -24,6 +24,10 @@ class Mayday():
         self.log_exception((e_type, e_value, e_traceback))
         sys.__excepthook__(e_type, e_value, e_traceback)
 
+    def __exithook(self):
+        '''Runs when program exit'''
+        self.log_exception("MindGoWrapper.Mayday.log_exception.__exithook", sys.exc_info())
+
     def log_exception(self, additional_message, exc_info, do_callback=True):
         # Construct log string
         try:
@@ -71,3 +75,5 @@ OS: {},Python: {},pwd: {}
         self.log_callback = log_callback
         # random session id
         self.session_id = uuid.uuid1()
+        # register interpreter exit handler
+        atexit.register(self.__exithook)
