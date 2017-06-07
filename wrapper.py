@@ -236,6 +236,7 @@ class Wrapper():
         self.callbacks['after_trading_end'] = self._mindgo_after_trading_end
 
         self._print(self.welcome_string)
+        self._print("Session ID: {}".format(self.mayday.session_id))
         if self.mask_all_exceptions:
             self._print("异常处理模式已设置为静默处理所有异常。建议不要在调试环境中使用该选项。")
         self.log.debug('takeown finished')
