@@ -24,14 +24,18 @@ class Mayday():
         self.log_exception((e_type, e_value, e_traceback))
         sys.__excepthook__(e_type, e_value, e_traceback)
 
-    def log_exception(self, additional_message, exc_info):
+    def log_exception(self, additional_message, exc_info, do_callback=True):
         # Construct log string
+        try:
+            current_date = self.wrapper.date.strftime("%Y-%m-%d")
+        except AttributeError:
+            current_date = "Unable to get current date"
         logstr = '''%%% Unhandled exception %%% Session: {}
 Date: {}, Days: {}, Ticks: {}, Additional message: {}
 OS: {},Python: {},pwd: {}
 {}'''.format(
             self.session_id,
-            self.wrapper.date.strftime("%Y-%m-%d"),
+            current_date,
             self.wrapper.days,
             self.wrapper.ticks,
             additional_message,
@@ -48,8 +52,13 @@ OS: {},Python: {},pwd: {}
         else:
             # 否则用 logging 库
             self.log.critical(logstr)
-        if callable(log_callback):
-            log_callback(session_id, additional_message, exc_info, logstr)
+        if callable(self.log_callback):
+            try:
+                self.log_callback(
+                    session_id, additional_message, exc_info, logstr)
+            except:
+                self.log_exception(
+                    "MindGoWrapper.Mayday.log_exception.callback", sys.exc_info(), do_callback=False)
 
     def set_log_callback(self, func):
         self.log_callback = func
