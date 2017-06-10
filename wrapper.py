@@ -95,10 +95,14 @@ class Wrapper():
             # 不能做空
             if object_value < 0:
                 object_value = 0
-            if not (self.is_paused(symbol) or object_value == portfolio.has_value):
-                id = self.platform_apis.order_target_value(
-                    symbol, object_value)
-                portfolio.orders.append(id)
+            if not self.is_paused(symbol):
+                if portfolio.removed:
+                    id = self.platform_apis.order_target_value(symbol, 0)
+                    portfolio.orders.append(id)
+                elif object_value != portfolio.has_value:
+                    id = self.platform_apis.order_target_value(
+                        symbol, object_value)
+                    portfolio.orders.append(id)
 
     def _monitor_orders(self):
         '''监视订单完成情况，订单一旦完成就更新个股信息'''
