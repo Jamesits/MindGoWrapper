@@ -27,6 +27,8 @@ Assume your Jupyter notebook is in the root directory:
 !sh -c "cd MindGoWrapper; git pull"
 ```
 
+(This piece of code is outdated since MindGo is constantly disabling libraries to ensure "safety". Nice joke! For the most recent install code please see the most recent closed issue.)
+
 Non-root `pwd` is more complicated; you may not be able to use it in backtest panel. You can dig them out yourself; try not get lost in someone's home directory. ;)
 
 ### Cell 1
