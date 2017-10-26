@@ -26,9 +26,9 @@ def detect_runtime():
     如果在“我的研究”中的 Jupyter 环境里回测，返回 'research'
     无法识别则返回 'unknown'
     '''
-    if 'ipykernel' in sys.modules:
+    if 'ipykernel' in _sys.modules:
         return 'research'
-    elif 'IPython' in sys.modules:
+    elif 'IPython' in _sys.modules:
         return 'strategy'
     else:
         return 'unknown'
