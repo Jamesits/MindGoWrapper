@@ -30,7 +30,9 @@ class ModuleProxy(collections.Mapping):
         try: 
             return self._proxied_modules[key]
         except KeyError:
-            return self._proxied_modules[self.custom_prefix + key]
+            if key.startswith(self.custom_prefix):
+                key = key[len(self.custom_prefix):]
+            return self._proxied_modules[key]
 
     def __len__(self):
         return len(self._proxied_modules)
