@@ -16,7 +16,7 @@ class ModuleProxy(collections.Mapping):
         else:
             raise ValueError("name should be string or a list/tuple of strings")
 
-    def imported(func):
+    def imported(self, func):
         @wraps(func)
         def wrapper(*args, **kwargs):
             for name, module in self._proxied_modules.items():
