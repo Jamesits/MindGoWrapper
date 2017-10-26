@@ -17,7 +17,7 @@ class ModuleProxy(collections.Mapping):
             if isinstance(item, str):
                 self._import_module(item)
             elif isinstance(item, collections.Iterable):
-                self.import_module(item)
+                self.import_module(*item)
             else:
                 raise KeyError("I don't know what to import since this is a " + str(item))
 
