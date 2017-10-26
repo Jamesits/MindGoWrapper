@@ -14,9 +14,9 @@ class ModuleProxy(collections.Mapping):
     def import_module(self, *args):
         """Import modules recursively"""
         for item in args:
-            if isinstance(name, str):
+            if isinstance(item, str):
                 self._import_module(item)
-            elif isinstance(name, collections.Iterable):
+            elif isinstance(item, collections.Iterable):
                 self.import_module(item)
             else:
                 raise KeyError("I don't know what to import since this is a " + str(item))
