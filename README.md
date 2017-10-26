@@ -189,15 +189,16 @@ p.import_module((
     "requests",
 ))
 
+# every module is accessable using both its name and its name prefixed by `_`
+# as in the following example to prevent blocking by string.
+# You can change the prefix by setting p.custom_prefix
+
 # use the imported module directly from ModuleProxy
-print(p["os"].popen("uname -a").readlines())
+print(p["_os"].popen("uname -a").readlines())
 
 # use the imported module in a function in a simplified way
 # note: since they have string matching while processing AST
 # (i.e. you can't make a variable named `os`),
-# every module is accessable using both its name and its name prefixed by `_`
-# as in the following example.
-# You can change the prefix by setting p.custom_prefix
 @p.imported
 def test_function():
     print(_os.popen("uname -a").readlines())
