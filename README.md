@@ -14,9 +14,11 @@ Some wrapper for sh*t quant platform MindGo.
 
 ## Usage
 
-In backtest panel: Run Cell 0 from a Jupyter notebook in root directory then you are ready to go.
+In backtest panel: Run Cell 0 from a Jupyter notebook in root directory then you
+ are ready to go.
 
-In Jupyter notebook: Reset kernel every time before running. (`pwd` changes every time backtest is run.) Then use the following code.
+In Jupyter notebook: Reset kernel every time before running. (`pwd` changes
+ every time backtest is run.) Then use the following code.
 
 ### Cell 0
 
@@ -27,9 +29,12 @@ Assume your Jupyter notebook is in the root directory:
 !sh -c "cd MindGoWrapper; git pull"
 ```
 
-(This piece of code is outdated since MindGo is constantly disabling libraries to ensure "safety". Nice joke! For the most recent install code please see the most recent closed issue.)
+(This piece of code is outdated since MindGo is constantly disabling libraries
+ to ensure "safety". Nice joke! For the most recent install code please see the most recent closed issue.)
 
-Non-root `pwd` is more complicated; you may not be able to use it in backtest panel. You can dig them out yourself; try not get lost in someone's home directory. ;)
+Non-root `pwd` is more complicated; you may not be able to use it in backtest
+ panel. You can dig them out yourself; try not get lost in someone's home
+  directory. ;)
 
 ### Cell 1
 
@@ -158,3 +163,40 @@ w.scheduler.schedule(callback, Scheduler.timeslot([0, 10], 22, Scheduler.Unit.DA
 # Iterate through a pandas.Dataframe df by ascending/descending sequence of seq
 MindGoWrapper.utils.df_iter(df, seq, rank=False, ascending=True)
 ``` 
+
+
+### ModuleProxy
+
+The shit product manager says: we don't want users to know why they are wrong. 
+So they blocked `sys` and some other important modules from being loaded by 
+user. However I have the way to fix that, besides the drawback of writing Python 
+imports like Golang.
+
+```python
+from MindgoWrapper.moduleproxy import ModuleProxy
+p = ModuleProxy()
+
+# import one at a time
+p.import_module("sys")
+
+# import a lot together (like Golang)
+p.import_module((
+    "os",
+    "requests",
+))
+
+# use the imported module directly from ModuleProxy
+print(p["os"].popen("uname -a").readlines())
+
+# use the imported module in a function in a simplified way
+# note: since they have string matching while processing AST
+# (i.e. you can't make a variable named `os`),
+# every module is accessable using both its name and its name prefixed by `_`
+# as in the following example.
+# You can change the prefix by setting p.custom_prefix
+p.imported
+def test_function():
+    print(_os.popen("uname -a").readlines())
+
+test_function()
+```
