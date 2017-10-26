@@ -7,14 +7,19 @@ class ModuleProxy(collections.Mapping):
         self._proxied_modules = {}
         self.custom_prefix = "_"
 
-    def import_module(self, name: object) -> object:
-        if isinstance(name, str):
-            self._proxied_modules[name] = __future__.__builtins__["__import__"](name)
-        elif isinstance(name, collections.Iterable): # assuming list or tuples here
-            for item in name:
+    def _import_module(self, name: str):
+        """The magic happens here"""
+        self._proxied_modules[name] = __future__.__builtins__["__import__"](name)
+
+    def import_module(self, *args):
+        """Import modules recursively"""
+        for item in args:
+            if isinstance(name, str):
+                self._import_module(item)
+            elif isinstance(name, collections.Iterable):
                 self.import_module(item)
-        else:
-            raise ValueError("name should be string or a list/tuple of strings")
+            else:
+                raise KeyError("I don't know what to import since this is a " + str(item))
 
     def imported(self, func):
         @wraps(func)

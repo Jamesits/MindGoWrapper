@@ -184,10 +184,10 @@ p = ModuleProxy()
 p.import_module("sys")
 
 # import a lot together (like Golang)
-p.import_module((
+p.import_module(
     "os",
     "requests",
-))
+)
 
 # every module is accessable using both its name and its name prefixed by `_`
 # as in the following example to prevent blocking by string.
