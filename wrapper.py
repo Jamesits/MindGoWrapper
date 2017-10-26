@@ -6,12 +6,14 @@
 import logging
 from functools import partial
 import datetime
-import sys
 from .scheduler import Scheduler
 from .portfolio import Portfolio
 from .mayday import Mayday
 from .map import Map
 from .utils import detect_runtime
+from .moduleproxy import ModuleProxy
+p = ModuleProxy()
+p.import_module("sys")
 
 
 class Wrapper():
@@ -124,6 +126,7 @@ class Wrapper():
     ################################
     # MindGo 平台相关
 
+    @p.imported
     def _mindgo_initialize(self, account):
         '''在回测平台初始化时运行'''
         try:
@@ -131,10 +134,11 @@ class Wrapper():
             self.log.debug('_mindgo_initialize')
             self.date = self.account.start_date
         except:
-            self.mayday.log_exception("_mindgo_initialize", sys.exc_info())
+            self.mayday.log_exception("_mindgo_initialize", _sys.exc_info())
             if not self.mask_all_exceptions:
                 raise
 
+    @p.imported
     def _mindgo_handle_data(self, account, data):
         '''每个交易 tick 运行一次'''
         try:
@@ -151,10 +155,11 @@ class Wrapper():
             self.scheduler.check(
                 self.ticks, Scheduler.Unit.TICK, Scheduler.Slot.AFTER)
         except:
-            self.mayday.log_exception("_mindgo_handle_data", sys.exc_info())
+            self.mayday.log_exception("_mindgo_handle_data", _sys.exc_info())
             if not self.mask_all_exceptions:
                 raise
 
+    @p.imported
     def _mindgo_before_trading_start(self, account, data):
         '''每个交易日之前运行'''
         try:
@@ -167,10 +172,11 @@ class Wrapper():
                                  Scheduler.Slot.BEFORE)
         except:
             self.mayday.log_exception(
-                "_mindgo_before_trading_start", sys.exc_info())
+                "_mindgo_before_trading_start", _sys.exc_info())
             if not self.mask_all_exceptions:
                 raise
 
+    @p.imported
     def _mindgo_after_trading_end(self, account, data):
         '''每个交易日结束后运行'''
         try:
@@ -182,7 +188,7 @@ class Wrapper():
                                  Scheduler.Slot.AFTER)
         except:
             self.mayday.log_exception(
-                "_mindgo_after_trading_end", sys.exc_info())
+                "_mindgo_after_trading_end", _sys.exc_info())
             if not self.mask_all_exceptions:
                 raise
 
