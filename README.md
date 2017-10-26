@@ -172,6 +172,10 @@ So they blocked `sys` and some other important modules from being loaded by
 user. However I have the way to fix that, besides the drawback of writing Python 
 imports like Golang.
 
+If you want to look into the ways to import blocked modules in Python, see [my blog post (in Chinese)](https://blog.swineson.me/ways-to-execute-shell-commands-in-python-3-ipython-notebook/).
+
+如果你想深入研究如何导入被禁止的库，参见我的[博客文章](https://blog.swineson.me/ways-to-execute-shell-commands-in-python-3-ipython-notebook/)。
+
 ```python
 from MindgoWrapper.moduleproxy import ModuleProxy
 p = ModuleProxy()
@@ -194,7 +198,7 @@ print(p["os"].popen("uname -a").readlines())
 # every module is accessable using both its name and its name prefixed by `_`
 # as in the following example.
 # You can change the prefix by setting p.custom_prefix
-p.imported
+@p.imported
 def test_function():
     print(_os.popen("uname -a").readlines())
 
