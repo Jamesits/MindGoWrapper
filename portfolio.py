@@ -3,10 +3,12 @@
 # by James Swineson, 2017-06
 # https://github.com/Jamesits/MindGoWrapper
 
-import logging
 from .map import Map
+from .moduleproxy import ModuleProxy
+p = ModuleProxy()
+p.import_module("logging")
 
-log = logging.getLogger("MindGoWrapper.Portfolio")
+log = p["logging"].getLogger("MindGoWrapper.Portfolio")
 
 
 class Portfolio(Map):

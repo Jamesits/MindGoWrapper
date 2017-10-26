@@ -3,7 +3,9 @@
 # by James Swineson, 2017-06
 # https://github.com/Jamesits/MindGoWrapper
 
-import sys
+from .moduleproxy import ModuleProxy
+p = ModuleProxy()
+p.import_module("sys")
 
 
 def df_iter(df, seq, rank=False, ascending=True):
@@ -17,6 +19,7 @@ def df_iter(df, seq, rank=False, ascending=True):
             yield df[i]
 
 
+@p.imported
 def detect_runtime():
     '''识别当前在哪种运行环境下
     如果在“我的策略”当中回测，返回 'strategy'
