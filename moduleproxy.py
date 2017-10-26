@@ -26,8 +26,11 @@ class ModuleProxy(collections.Mapping):
             return func(*args, **kwargs)
         return wrapper
 
-    def __getitem__(self, key): 
-        return self._proxied_modules[key]
+    def __getitem__(self, key):
+        try: 
+            return self._proxied_modules[key]
+        except KeyError:
+            return self._proxied_modules[self.custom_prefix + name]
 
     def __len__(self):
         return len(self._proxied_modules)
