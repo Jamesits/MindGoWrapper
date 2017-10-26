@@ -4,8 +4,6 @@
 # https://github.com/Jamesits/MindGoWrapper
 
 
-__name__ = 'MindGoWrapper'
-__package__ = 'MindGoWrapper'
 __version__ = '0.0.2'
 
 all = ['map', 'mayday', 'moduleproxy', 'portfolio', 'scheduler', 'utils', 'wrapper']
