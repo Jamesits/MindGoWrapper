@@ -184,6 +184,8 @@ p = ModuleProxy()
 p.import_module("sys")
 
 # import a lot together (like Golang)
+# you can also use lists and tuples as arguments;
+# they will be parsed recursively.
 p.import_module(
     "os",
     "requests",
@@ -198,7 +200,9 @@ print(p["_os"].popen("uname -a").readlines())
 
 # use the imported module in a function in a simplified way
 # note: since they have string matching while processing AST
-# (i.e. you can't make a variable named `os`),
+# (i.e. you can't make a variable named `os`), you can use the
+# prefixed version too. 
+# You cannot change p.custom_prefix after the function is defined.
 @p.imported
 def test_function():
     print(_os.popen("uname -a").readlines())
