@@ -1,3 +1,8 @@
+#!/usr/bin/env python3
+# MindGoWrapper
+# by James Swineson, 2017-10
+# https://github.com/Jamesits/MindGoWrapper
+
 import __future__
 import collections
 from functools import wraps
