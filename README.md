@@ -95,7 +95,9 @@ w.takeown()
 
 # collect telemetry information to other service for debugging and logging
 def exc_callback(session_id, additional_message, exc_info, log_message):
-    send_mail(log_message)
+    # do custom actions to collect log. (Note: sometimes MindGo will restart a boomed program at very high 
+    # frequency and you might got a full mail inbox. Warned you.)
+    send_mail(log_message)
 w.mayday.set_log_callback(exc_callback)
 ```
 
@@ -172,12 +174,28 @@ So they blocked `sys` and some other important modules from being loaded by
 user. However I have the way to fix that, besides the drawback of writing Python 
 imports like Golang.
 
+同花顺 MindGo 产品经理表示，我们不想让客户知道他们究竟犯了什么错，反正他们不会写超过十行
+的程序，出了错肉眼调试一下就好了。我们也不想让客户知道我们犯了什么错，所以所有错误都丢给
+客户程序就好了。我们还不能让客户知道我们的辣鸡代码和险恶用心，所以我们不能让客户看到我们
+的代码。于是他们做了个非常神奇的决定：禁止导入 `sys` 等对于 Python 编程至关重要的自带库。
+
+但是他们不能阻止我导入库。于是 ModuleProxy 诞生了：你可以用类似 Golang 的语法和方便的
+装饰器导入一个被阻止导入的库并在你的程序里面使用。你甚至还可以导入 `os` 库来执行 shell
+命令。
+
+They know nothing about Python.
+
+他们根本不懂 Python。
+
 If you want to look into the ways to import blocked modules in Python, see [my blog post (in Chinese)](https://blog.swineson.me/ways-to-execute-shell-commands-in-python-3-ipython-notebook/).
 
 如果你想深入研究如何导入被禁止的库，参见我的[博客文章](https://blog.swineson.me/ways-to-execute-shell-commands-in-python-3-ipython-notebook/)。
 
 ```python
+# if you use this as a part of MindgoWrapper:
 from MindgoWrapper.moduleproxy import ModuleProxy
+# if you just uploaded the file to the root folder:
+# from moduleproxy import ModuleProxy
 p = ModuleProxy()
 
 # import one at a time
